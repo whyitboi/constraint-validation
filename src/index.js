@@ -7,7 +7,13 @@ const country = document.getElementById("country");
 const postalCode = document.getElementById("postal-code");
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirm");
-// const passwordPattern = /^[a-zA-Z]${8}/
+
+// Set all elements to required so that form can use Contraint-Validation API
+email.required = true;
+country.required = true;
+postalCode.required = true;
+password.required = true;
+confirmPassword.required = true;
 
 email.addEventListener("input", () => {
   if (email.validity.valid) {
@@ -75,7 +81,5 @@ form.addEventListener("submit", (event) => {
     alert("High 5!!!");
   } else {
     event.preventDefault();
-    form.setCustomValidity("Please ensure you complete the form as required");
   }
-  //form.reportValidity();
 });
