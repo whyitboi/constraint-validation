@@ -18,7 +18,7 @@ email.addEventListener("input", () => {
 });
 
 country.addEventListener("input", () => {
-  country.pattern = /^[A-Z][a-zA-Z]{3,}$/;
+  country.pattern = "^[A-Z][a-zA-Z]{3,}$";
   if (!country.patternMismatch) {
     country.setCustomValidity("");
   } else {
@@ -45,7 +45,7 @@ postalCode.addEventListener("input", () => {
 
 password.addEventListener("input", () => {
   //regExp for min 8 characters, 1 uppercase, 1 special character and 1 number
-  password.pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  password.pattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$";
   if (password.validity.patternMismatch) {
     password.setCustomValidity(
       "Your password must be a min of 8 characters and must include one of each uppercase, number and special character",
