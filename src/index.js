@@ -15,17 +15,21 @@ email.addEventListener("input", () => {
   } else {
     email.setCustomValidity("Please enter a valid email address");
   }
+  email.reportValidity();
 });
 
 country.addEventListener("input", () => {
+  //regExp for min 4 characters with the first charater as capital
+  //using element.pattern property means regExp needs to be a string
   country.pattern = "^[A-Z][a-zA-Z]{3,}$";
-  if (!country.patternMismatch) {
+  if (!country.validity.patternMismatch) {
     country.setCustomValidity("");
   } else {
     country.setCustomValidity(
       "A country name must start with a capital letter an must be at least 4 characters e.g 'Chad' ",
     );
   }
+  country.reportValidity();
 });
 
 //using postal-code-checker and country-to-iso libraries for this
@@ -41,10 +45,12 @@ postalCode.addEventListener("input", () => {
       `Please enter a valid ${country.value} postal code for`,
     );
   }
+  postalCode.reportValidity();
 });
 
 password.addEventListener("input", () => {
-  //regExp for min 8 characters, 1 uppercase, 1 special character and 1 number
+  //regExp for 1 capital letter, 1 number, 1 non-alphanumeric (special) character, min of 8 characters in total
+  //using element.pattern property means regExp needs to be a string
   password.pattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$";
   if (password.validity.patternMismatch) {
     password.setCustomValidity(
@@ -53,6 +59,7 @@ password.addEventListener("input", () => {
   } else {
     password.setCustomValidity("");
   }
+  password.reportValidity();
 });
 
 confirmPassword.addEventListener("input", () => {
@@ -70,4 +77,5 @@ form.addEventListener("submit", (event) => {
     event.preventDefault();
     form.setCustomValidity("Please ensure you complete the form as required");
   }
+  //form.reportValidity();
 });
