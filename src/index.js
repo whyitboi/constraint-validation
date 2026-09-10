@@ -1,7 +1,9 @@
+import { validatePostalCode } from "postal-code-checker";
+import { countryToAlpha2 } from "country-to-iso";
+
 const form = document.querySelector("form");
 const email = document.getElementById("mail");
 const country = document.getElementById("country");
-const countryPattern = /^[A-Z][a-zA-Z]{3,}$/;
 const postalCode = document.getElementById("postal-code");
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirm");
@@ -11,16 +13,61 @@ email.addEventListener("input", () => {
   if (email.validity.valid) {
     email.setCustomValidity("");
   } else {
-    setCustomValidity("Please enter a valid email address");
+    email.setCustomValidity("Please enter a valid email address");
   }
 });
 
 country.addEventListener("input", () => {
-  if (countryPattern.test(country.value)) {
+  country.pattern = /^[A-Z][a-zA-Z]{3,}$/;
+  if (!country.patternMismatch) {
     country.setCustomValidity("");
   } else {
     country.setCustomValidity(
       "A country name must start with a capital letter an must be at least 4 characters e.g 'Chad' ",
     );
+  }
+});
+
+//using postal-code-checker and country-to-iso libraries for this
+postalCode.addEventListener("input", () => {
+  const isValidPostalCode = validatePostalCode(
+    countryToAlpha2(country.value),
+    postalCode.value,
+  );
+  if (isValidPostalCode) {
+    postalCode.setCustomValidity("");
+  } else {
+    postalCode.setCustomValidity(
+      `Please enter a valid ${country.value} postal code for`,
+    );
+  }
+});
+
+password.addEventListener("input", () => {
+  //regExp for min 8 characters, 1 uppercase, 1 special character and 1 number
+  password.pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  if (password.validity.patternMismatch) {
+    password.setCustomValidity(
+      "Your password must be a min of 8 characters and must include one of each uppercase, number and special character",
+    );
+  } else {
+    password.setCustomValidity("");
+  }
+});
+
+confirmPassword.addEventListener("input", () => {
+  if (password.value !== confirmPassword.value) {
+    confirmPassword.setCustomValidity("The password must match");
+  } else {
+    confirmPassword.setCustomValidity("");
+  }
+});
+
+form.addEventListener("submit", (event) => {
+  if (form.checkValidity()) {
+    alert("High 5!!!");
+  } else {
+    event.preventDefault();
+    form.setCustomValidity("Please ensure you complete the form as required");
   }
 });
