@@ -13,21 +13,19 @@
         <button id="about">About</button>
       </nav>
     </header>
-    <div id="content"></div>
-
-    <!-- Photo Credit -->
-    <div class="photo-credit">
-      Photo by
-      <a
-        href="https://unsplash.com/@ninjason?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-        >Jason Leung</a
-      >
-      on
-      <a
-        href="https://unsplash.com/photos/photo-of-pub-set-in-room-during-daytime-poI7DelFiVA?utm
-      _source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-        >Unsplash</a
-      >
+    <div id="content">
+      <form novalidate method="get" action="#">
+        <label for="mail">Email:</label>
+        <input type="email" id="mail" />
+        <label for="country">Country:</label>
+        <input type="text" id="country" />
+        <label for="postal-code">Postal Code:</label>
+        <input type="text" id="postal-code" />
+        <label for="password">Password</label>
+        <input type="password" id="password" />
+        <label for="confirm">Confirm Password</label>
+        <input type="password" id="confirm" />
+      </form>
     </div>
   </body>
 </html>

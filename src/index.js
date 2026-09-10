@@ -1,28 +1,26 @@
-import "./style.css";
-import { pageLoad } from "./pageLoad.js";
-import { displayHome } from "./home.js";
-import { displayMenu } from "./menu.js";
-import { displayAbout } from "./about.js";
+const form = document.querySelector("form");
+const email = document.getElementById("mail");
+const country = document.getElementById("country");
+const countryPattern = /^[A-Z][a-zA-Z]{3,}$/;
+const postalCode = document.getElementById("postal-code");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirm");
+// const passwordPattern = /^[a-zA-Z]${8}/
 
-//change code to follow Open-closed principle
-//remove switch case
-
-//pages holds key and value. Value is function name but not called until clicked.
-//see event listener
-const pages = {
-  home: displayHome,
-  about: displayAbout,
-  menu: displayMenu,
-};
-
-//get all the buttons in the nav alone
-const buttons = document.querySelectorAll("nav button");
-
-//check them against the Object pages and then call the related function
-buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    pages[button.id]();
-  });
+email.addEventListener("input", () => {
+  if (email.validity.valid) {
+    email.setCustomValidity("");
+  } else {
+    setCustomValidity("Please enter a valid email address");
+  }
 });
 
-pageLoad();
+country.addEventListener("input", () => {
+  if (countryPattern.test(country.value)) {
+    country.setCustomValidity("");
+  } else {
+    country.setCustomValidity(
+      "A country name must start with a capital letter an must be at least 4 characters e.g 'Chad' ",
+    );
+  }
+});
