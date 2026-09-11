@@ -1,4 +1,4 @@
-import { validatePostalCode } from "postal-code-checker";
+import { validatePostalCode, getAllCountries } from "postal-code-checker";
 import { countryToAlpha2 } from "country-to-iso";
 
 const form = document.querySelector("form");
@@ -15,11 +15,24 @@ postalCode.required = true;
 password.required = true;
 confirmPassword.required = true;
 
+//checks the validity of country regardless of passing regExp
+//Written as a function so both country and postalCode can use.
+const countriesAndCodes = getAllCountries();
+function checkCountry() {
+  const countryObj = countriesAndCodes.find((item) => {
+    return item.countryName === country.value;
+  });
+  if (!countryObj) {
+    return null;
+  }
+  return countryObj.countryCode;
+}
+
 email.addEventListener("input", () => {
-  if (email.validity.valid) {
-    email.setCustomValidity("");
-  } else {
+  if (!email.validity.valid) {
     email.setCustomValidity("Please enter a valid email address");
+  } else {
+    email.setCustomValidity("");
   }
   email.reportValidity();
 });
@@ -27,7 +40,7 @@ email.addEventListener("input", () => {
 country.addEventListener("input", () => {
   //regExp for min 4 characters with the first charater as capital
   //using element.pattern property means regExp needs to be a string
-  country.pattern = "^[A-Z][a-zA-Z]{3,}$";
+  country.pattern = "^([A-Z])(?=.*[a-zA-Z]).{4,}$";
   if (!country.validity.patternMismatch) {
     country.setCustomValidity("");
   } else {
@@ -35,22 +48,36 @@ country.addEventListener("input", () => {
       "A country name must start with a capital letter an must be at least 4 characters e.g 'Chad' ",
     );
   }
+  //Checks if the country exists regardless of regExp pattern pass
+  if (!checkCountry()) {
+    country.setCustomValidity("Please enter a valid country");
+  } else {
+    country.setCustomValidity("");
+  }
   country.reportValidity();
 });
 
 //using postal-code-checker and country-to-iso libraries for this
 postalCode.addEventListener("input", () => {
-  const isValidPostalCode = validatePostalCode(
-    countryToAlpha2(country.value),
-    postalCode.value,
-  );
-  if (isValidPostalCode) {
-    postalCode.setCustomValidity("");
+  //Checks if the country exists before using library
+  if (!checkCountry()) {
+    postalCode.setCustomValidity("Please enter a valid country first");
+    postalCode.reportValidity();
+    return;
   } else {
-    postalCode.setCustomValidity(
-      `Please enter a valid ${country.value} postal code for`,
+    const isValidPostalCode = validatePostalCode(
+      countryToAlpha2(country.value),
+      postalCode.value,
     );
+    if (!isValidPostalCode) {
+      postalCode.setCustomValidity(
+        `Please enter a postal code that is valid for  ${country.value}`,
+      );
+    } else {
+      postalCode.setCustomValidity("");
+    }
   }
+
   postalCode.reportValidity();
 });
 
@@ -74,12 +101,13 @@ confirmPassword.addEventListener("input", () => {
   } else {
     confirmPassword.setCustomValidity("");
   }
+  confirmPassword.reportValidity();
 });
 
 form.addEventListener("submit", (event) => {
-  if (form.checkValidity()) {
-    alert("High 5!!!");
-  } else {
+  if (!form.checkValidity()) {
     event.preventDefault();
+  } else {
+    alert("High 5!!!");
   }
 });
