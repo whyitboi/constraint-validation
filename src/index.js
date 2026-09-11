@@ -1,5 +1,5 @@
+import "./style.css";
 import { validatePostalCode, getAllCountries } from "postal-code-checker";
-import { countryToAlpha2 } from "country-to-iso";
 
 const form = document.querySelector("form");
 const email = document.getElementById("mail");
@@ -29,7 +29,7 @@ function checkCountry() {
 }
 
 email.addEventListener("input", () => {
-  if (!email.validity.typeMismatch) {
+  if (email.validity.typeMismatch) {
     email.setCustomValidity("Please enter a valid email address");
   } else {
     email.setCustomValidity("");
@@ -66,7 +66,7 @@ postalCode.addEventListener("input", () => {
     return;
   } else {
     const isValidPostalCode = validatePostalCode(
-      countryToAlpha2(country.value),
+      checkCountry(),
       postalCode.value,
     );
     if (!isValidPostalCode) {
@@ -105,7 +105,6 @@ confirmPassword.addEventListener("input", () => {
 });
 
 form.addEventListener("submit", (event) => {
-  // console.log({ email: email.validity });
   if (!form.checkValidity()) {
     event.preventDefault();
   } else {
