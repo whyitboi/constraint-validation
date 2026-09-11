@@ -29,7 +29,7 @@ function checkCountry() {
 }
 
 email.addEventListener("input", () => {
-  if (!email.validity.valid) {
+  if (!email.validity.typeMismatch) {
     email.setCustomValidity("Please enter a valid email address");
   } else {
     email.setCustomValidity("");
@@ -105,6 +105,7 @@ confirmPassword.addEventListener("input", () => {
 });
 
 form.addEventListener("submit", (event) => {
+  // console.log({ email: email.validity });
   if (!form.checkValidity()) {
     event.preventDefault();
   } else {
