@@ -41,19 +41,19 @@ country.addEventListener("input", () => {
   //regExp for min 4 characters with the first charater as capital
   //using element.pattern property means regExp needs to be a string
   country.pattern = "^([A-Z])(?=.*[a-zA-Z]).{4,}$";
-  if (!country.validity.patternMismatch) {
-    country.setCustomValidity("");
-  } else {
+  if (country.validity.patternMismatch) {
     country.setCustomValidity(
       "A country name must start with a capital letter an must be at least 4 characters e.g 'Chad' ",
     );
-  }
-  //Checks if the country exists regardless of regExp pattern pass
-  if (!checkCountry()) {
-    country.setCustomValidity("Please enter a valid country");
   } else {
-    country.setCustomValidity("");
+    //Checks if the country exists regardless of regExp pattern pass
+    if (!checkCountry()) {
+      country.setCustomValidity("Please enter a valid country");
+    } else {
+      country.setCustomValidity("");
+    }
   }
+
   country.reportValidity();
 });
 
